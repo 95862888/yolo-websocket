@@ -1,0 +1,17 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8765:8765"
+    networks:
+      - net
+  model:
+    build: ./model
+    networks:
+      - net
+    depends_on:
+      - backend
+    devices:
+      - /dev/video0
+networks:
+  net:
