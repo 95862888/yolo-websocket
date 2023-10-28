@@ -4,7 +4,7 @@ from websockets.server import serve
 
 async def handler(websocket):
     async for message in websocket:
-        pass
+        print('recv msg', message)
         # await websocket.recv(message)
 
 

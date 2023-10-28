@@ -1,7 +1,9 @@
 from ultralytics import YOLO
+import base64
 import asyncio
 import json
 from websockets.sync.client import connect
+import cv2
 
 
 host = 'yolov8-backend-1'
@@ -34,6 +36,11 @@ if __name__ == '__main__':
 
     with connect(f"ws://{host}:8765/") as websocket:
         for pred in preds:
-            boxes = pred.boxes
-            json_boxes = parse_boxes_to_json(boxes)
-            websocket.send(json_boxes)
+            # boxes = pred.boxes
+            # json_boxes = parse_boxes_to_json(boxes)
+            # websocket.send(json_boxes)
+
+            encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 60]
+            result, encoded_img = cv2.imencode('.jpg', pred.orig_img, encode_param)
+
+            websocket.send(base64.b64encode(encoded_img))
